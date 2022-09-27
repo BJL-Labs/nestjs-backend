@@ -1,0 +1,26 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 10
+    commands:
+      - cd backend
+  pre_build:
+    commands:
+      - npm i
+  build:
+    commands:
+      - npm run build
+  post_build:
+    commands:
+      - cp package.json dist/package.json
+      - cp -r ./views ./dist/views
+      - cd dist
+      - npm i
+
+artifacts:
+  files:
+    - '**/*'
+  base-directory: backend/dist
+  name: getbots-backend-graphql-$(AWS_REGION)-$(date +%Y-%m-%d)
