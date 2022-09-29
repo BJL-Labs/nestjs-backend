@@ -1,6 +1,6 @@
 import { Delete, HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { FilterQuery, Types, UpdateQuery } from 'mongoose';
+import { FilterQuery, ObjectId, Types, UpdateQuery } from 'mongoose';
 import { PaginationArgs } from '@shared/pagination/pagination-args';
 import { Pagination } from '@shared/pagination'
 import { User, UserDocument } from './user.model';
@@ -46,6 +46,10 @@ export class UserRepository {
           },
         ],
       })
+    }
+
+    async findByTenant(data: any): Promise<UserDocument[]> {
+      return await this.userModel.find({tenant: data.tenant}) 
     }
     
     async findById(id: string): Promise<UserDocument> {

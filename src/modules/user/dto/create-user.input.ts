@@ -1,7 +1,11 @@
 import { InputType , Field } from "@nestjs/graphql";
+import { Types } from "mongoose";
 
 @InputType()
 export class CreateUserInput {
+    @Field({ nullable: true })
+    tenant: string;
+
     @Field({ nullable: true })
     name: string;
     

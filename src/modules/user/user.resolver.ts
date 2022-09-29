@@ -1,7 +1,11 @@
 import { GqlAuthGuard } from '@guards/gql-auth.guard';
+import { Tenant } from '@modules/tenant/tenant.model';
+import { TenantRepository } from '@modules/tenant/tenant.repository';
 import { UseGuards } from '@nestjs/common';
-import { Args, Mutation, Resolver, Query } from '@nestjs/graphql';
+import { Args, Mutation, Resolver, Query, ResolveField, Parent } from '@nestjs/graphql';
+import { SelectedTenant } from '@shared/decorators/decorators';
 import { PaginationArgs } from '@shared/pagination/pagination-args';
+import { Types } from 'mongoose';
 import { CreateUserInput } from './dto/create-user.input';
 import { GetUserInput } from './dto/get-user.input';
 import { UpdatePasswordInput, UpdateUserInput } from './dto/update-user.input';
@@ -12,15 +16,18 @@ import { UserRepository } from './user.repository';
 @Resolver((of)=> User)
 export class UserResolver {
     constructor(
-        private userRepository: UserRepository
+        private userRepository: UserRepository,
+        private readonly tenantRepository: TenantRepository,
     ){}
 
-    @UseGuards(GqlAuthGuard)
+
     @Mutation((returns) => User)
     async createUser(
-        @Args('data') data: CreateUserInput
+        @Args('data') data: CreateUserInput,
     ): Promise<User>{
-        const user = await this.userRepository.create(data);
+        const user = await this.userRepository.create({
+          ...data,
+        });
         return user;
     }
     
@@ -76,4 +83,10 @@ export class UserResolver {
         _id: query._id,
       })
     }
+
+    
+  @ResolveField(() => Tenant)
+  async tenant(@Parent() parent: User): Promise<Tenant> {
+    return await this.tenantRepository.findOne({ _id: parent.tenant })
+  }
 }

@@ -15,3 +15,11 @@ export const GqlUser = createParamDecorator(
     return ctx.req && ctx.req.user
   },
 )
+
+
+export const SelectedTenant = createParamDecorator(
+  (data: unknown, context: ExecutionContext): Types.ObjectId => {
+    const ctx = GqlExecutionContext.create(context).getContext()
+    return new Types.ObjectId(ctx.req.tenant._id)
+  },
+)

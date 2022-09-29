@@ -2,6 +2,37 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type TenantAddress {
+  zipCode: String
+  street: String
+  complement: String
+  number: String
+  city: String
+  state: String
+}
+
+type Tenant {
+  _id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  name: String!
+  email: String
+  picture: String
+  socialReason: String
+  phone: String
+  mobilePhone: String
+  cpfCnpj: String
+  address: TenantAddress
+  municipalInscription: String
+  stateInscription: String
+  users: [User!]!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
 type User {
   _id: ID!
   createdAt: DateTime!
@@ -11,12 +42,8 @@ type User {
   email: String
   password: String
   picture: String
+  tenant: Tenant!
 }
-
-"""
-A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
-"""
-scalar DateTime
 
 type UserConnection {
   docs: [User!]
@@ -38,13 +65,33 @@ type AuthResponse {
   user: User!
 }
 
+type TenantConnection {
+  docs: [Tenant!]
+  totalDocs: Int!
+  limit: Int!
+  totalPages: Int!
+  page: Int!
+  pagingCounter: Int!
+  hasPrevPage: Boolean!
+  hasNextPage: Boolean!
+  prevPage: Int
+  nextPage: Int
+  hasMore: Boolean!
+}
+
 type Query {
   health: String!
   listUsers(page: Int, limit: Int, sort: String, offset: Int, maxTimeMS: Int): UserConnection!
   getUser(query: GetUserInput!): User!
+  listTenants(page: Int, limit: Int, sort: String, offset: Int, maxTimeMS: Int): TenantConnection!
+  getTenant(query: GetTenantInput!): Tenant!
 }
 
 input GetUserInput {
+  _id: String
+}
+
+input GetTenantInput {
   _id: String
 }
 
@@ -55,6 +102,9 @@ type Mutation {
   removeUser(id: String!): User!
   updateUser(data: UpdateUserInput!, id: String!): User!
   updateUserPassword(data: UpdatePasswordInput!, id: String!): User!
+  createTenant(data: CreateTenantInput!): Tenant!
+  removeTenant(id: String!): Tenant!
+  updateTenant(data: UpdateTenantInput!, id: String!): Tenant!
 }
 
 input LoginInput {
@@ -63,6 +113,7 @@ input LoginInput {
 }
 
 input CreateUserInput {
+  tenant: String
   name: String
   username: String
   email: String
@@ -80,4 +131,39 @@ input UpdateUserInput {
 input UpdatePasswordInput {
   password: String!
   confirmPassword: String!
+}
+
+input CreateTenantInput {
+  name: String
+  email: String
+  picture: String
+  socialReason: String
+  phone: String
+  mobilePhone: String
+  cpfCnpj: String
+  address: TenantAddressInput
+  municipalInscription: String
+  stateInscription: String
+}
+
+input TenantAddressInput {
+  zipCode: String
+  street: String
+  complement: String
+  number: String
+  city: String
+  state: String
+}
+
+input UpdateTenantInput {
+  name: String
+  email: String
+  picture: String
+  socialReason: String
+  phone: String
+  mobilePhone: String
+  cpfCnpj: String
+  address: TenantAddressInput
+  municipalInscription: String
+  stateInscription: String
 }

@@ -2,10 +2,18 @@ import { Field, HideField, InputType, ObjectType } from "@nestjs/graphql";
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { Document, Schema as MongooseSchema, Types } from 'mongoose'
 import { Model } from '@shared/model';
+import { Tenant } from "@modules/tenant/tenant.model";
 
 @Schema()
 @ObjectType()
 export class User extends Model {
+    @Prop({
+        type: String,
+        ref: 'tenants',
+        required: true,
+    })
+    tenant: string
+
     @Prop({
         type: String,
         trim: true,

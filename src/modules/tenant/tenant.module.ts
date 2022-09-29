@@ -1,11 +1,12 @@
+
+import { User, UserSchema } from '@modules/user/user.model';
+import { UserRepository } from '@modules/user/user.repository';
+import { UserService } from '@modules/user/user.service';
 import { Global, Module } from '@nestjs/common';
-import { UserResolver } from './user.resolver';
-import { UserRepository } from './user.repository';
 import { MongooseModule } from '@nestjs/mongoose'
-import { User, UserSchema } from './user.model';
-import { UserService } from './user.service';
-import { Tenant, TenantSchema } from '@modules/tenant/tenant.model';
-import { TenantRepository } from '@modules/tenant/tenant.repository';
+import { Tenant, TenantSchema } from './tenant.model';
+import { TenantRepository } from './tenant.repository';
+import { TenantResolver } from './tenant.resolver';
 
 const Repositories = [
   {
@@ -37,9 +38,9 @@ const Repositories = [
   ],
   providers: [
     UserService,
-    UserResolver,
+    TenantResolver,
     ...Repositories.map((repo) => repo.repository),
   ],
-  exports: [UserRepository, UserService],
+  exports: [TenantRepository, UserService],
 })
-export class UserModule {}
+export class TenantModule {}

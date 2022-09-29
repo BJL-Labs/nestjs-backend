@@ -12,6 +12,7 @@ import { DataLoaderInterceptor } from 'nestjs-dataloader';
 import { AppResolver } from './app.resolver';
 import { CustomFieldMiddleware } from '@shared/middlewares/field.middleware';
 import { AuthModule } from '@modules/auth/auth.module';
+import { TenantModule } from './modules/tenant/tenant.module';
 
 mongoose.set('debug', true)
 
@@ -38,6 +39,7 @@ mongoose.set('debug', true)
     }),
     AuthModule,
     UserModule,
+    TenantModule,
   ],
   controllers: [AppController],
   providers: [ 
