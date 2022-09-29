@@ -1,5 +1,6 @@
 import { Field, InputType } from "@nestjs/graphql"
 import { Types } from "mongoose"
+import { UserRole } from "../user.model"
 
 @InputType()
 export class UpdatePasswordInput {
@@ -13,6 +14,9 @@ export class UpdatePasswordInput {
 
 @InputType()
 export class UpdateUserInput {
+  @Field({ nullable: false })
+  role?: UserRole
+
   @Field({ nullable: true })
   username: string
 

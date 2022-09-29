@@ -1,15 +1,17 @@
 import { GqlAuthGuard } from '@guards/gql-auth.guard';
+import { RolesGuard } from '@guards/roles.guard';
 import { Tenant } from '@modules/tenant/tenant.model';
 import { TenantRepository } from '@modules/tenant/tenant.repository';
 import { UseGuards } from '@nestjs/common';
 import { Args, Mutation, Resolver, Query, ResolveField, Parent } from '@nestjs/graphql';
 import { SelectedTenant } from '@shared/decorators/decorators';
+import { Roles } from '@shared/decorators/roles';
 import { PaginationArgs } from '@shared/pagination/pagination-args';
 import { Types } from 'mongoose';
 import { CreateUserInput } from './dto/create-user.input';
 import { GetUserInput } from './dto/get-user.input';
 import { UpdatePasswordInput, UpdateUserInput } from './dto/update-user.input';
-import { User } from './user.model';
+import { User, UserRole } from './user.model';
 import { UserConnection } from './user.pagination';
 import { UserRepository } from './user.repository';
 
@@ -32,6 +34,7 @@ export class UserResolver {
     }
     
     @UseGuards(GqlAuthGuard)
+    @Roles(UserRole.admin, UserRole.moderator, UserRole.manager)
     @Mutation((returns) => User)
     async removeUser(
       @Args('id') id: string,
@@ -41,6 +44,7 @@ export class UserResolver {
     }
   
     @UseGuards(GqlAuthGuard)
+    @Roles(UserRole.admin, UserRole.moderator, UserRole.manager)
     @Mutation((returns) => User)
     async updateUser(
       @Args('id') id: string,
@@ -53,6 +57,7 @@ export class UserResolver {
     }
 
     @UseGuards(GqlAuthGuard)
+    @Roles(UserRole.admin, UserRole.moderator, UserRole.manager)
     @Mutation((returns) => User)
     async updateUserPassword(
       @Args('id') id: string,
@@ -64,7 +69,8 @@ export class UserResolver {
       return user
     }
 
-    @UseGuards(GqlAuthGuard)
+    @UseGuards(GqlAuthGuard, RolesGuard)
+    @Roles(UserRole.admin, UserRole.moderator, UserRole.manager)
     @Query((returns) => UserConnection)
     async listUsers(
         @Args() pagination: PaginationArgs,
@@ -75,6 +81,7 @@ export class UserResolver {
     }
 
     @UseGuards(GqlAuthGuard)
+    @Roles(UserRole.admin, UserRole.moderator, UserRole.manager)
     @Query((returns) => User)
     async getUser(
       @Args('query') query: GetUserInput,

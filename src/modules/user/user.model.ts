@@ -1,8 +1,29 @@
-import { Field, HideField, InputType, ObjectType } from "@nestjs/graphql";
+import { Field, HideField, InputType, ObjectType, registerEnumType } from "@nestjs/graphql";
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { Document, Schema as MongooseSchema, Types } from 'mongoose'
 import { Model } from '@shared/model';
-import { Tenant } from "@modules/tenant/tenant.model";
+
+
+export enum UserRole {
+   admin = 'admin',
+   moderator = 'moderator',
+   manager = 'manager',
+   operator = 'operator',
+   supervisor = 'supervisor',
+   cordenator = 'cordenator',
+   finance = 'finance',
+   legal = 'legal',
+   humanResources = 'humanResources',
+   backoffice = 'backoffice',
+   medias = 'medias',
+   monitor = 'monitor',
+}
+
+
+registerEnumType(UserRole, {
+    name: 'UserRole',
+    description: 'User role type enum'
+})
 
 @Schema()
 @ObjectType()
@@ -51,6 +72,27 @@ export class User extends Model {
     })
     @Field({ nullable: true })
     picture?: string
+
+    @Prop({
+        type: String,
+        enum: [
+            UserRole.admin,
+            UserRole.moderator,
+            UserRole.manager,
+            UserRole.operator,
+            UserRole.supervisor,
+            UserRole.cordenator,
+            UserRole.finance,
+            UserRole.legal,
+            UserRole.humanResources,
+            UserRole.backoffice,
+            UserRole.medias,
+            UserRole.monitor,
+        ],
+        required: true,
+    })
+    @Field(() => String, { nullable: false })
+    role: string
 
 }
 

@@ -31,28 +31,7 @@ export class GqlAuthGuard extends AuthGuard('jwt') implements CanActivate {
     if (!user) {
       throw new HttpException('UNAUTHORIZED', HttpStatus.UNAUTHORIZED)
     }
-
-    // const roles = this.reflector.get<string[]>('roles', context.getHandler())
-    // if (
-    //   roles?.length &&
-    //   !roles.find((role) => userRoles.find((userRole) => userRole === role))
-    // ) {
-    //   throw new HttpException('NOT_PERMITTED', HttpStatus.FORBIDDEN)
-    // }
-
-    // const actions = this.reflector.get<string[]>(
-    //   'actions',
-    //   context.getHandler(),
-    // )
-    // if (
-    //   actions?.length &&
-    //   !actions.find((action) =>
-    //     userActions.find((userAction) => userAction === action),
-    //   )
-    // ) {
-    //   throw new HttpException('NOT_PERMITTED', HttpStatus.FORBIDDEN)
-    // }
-
+    
     return true
   }
 }

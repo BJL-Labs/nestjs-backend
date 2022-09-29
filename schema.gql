@@ -2,6 +2,24 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type User {
+  _id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  name: String
+  username: String
+  email: String
+  password: String
+  picture: String
+  role: String!
+  tenant: Tenant!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
 type TenantAddress {
   zipCode: String
   street: String
@@ -26,23 +44,6 @@ type Tenant {
   municipalInscription: String
   stateInscription: String
   users: [User!]!
-}
-
-"""
-A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
-"""
-scalar DateTime
-
-type User {
-  _id: ID!
-  createdAt: DateTime!
-  updatedAt: DateTime!
-  name: String
-  username: String
-  email: String
-  password: String
-  picture: String
-  tenant: Tenant!
 }
 
 type UserConnection {
@@ -113,6 +114,7 @@ input LoginInput {
 }
 
 input CreateUserInput {
+  role: String!
   tenant: String
   name: String
   username: String
@@ -122,6 +124,7 @@ input CreateUserInput {
 }
 
 input UpdateUserInput {
+  role: String!
   username: String
   email: String
   name: String
